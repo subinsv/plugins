@@ -270,7 +270,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     }
     PackageManager packageManager = activity.getPackageManager();
     if (Build.VERSION.SDK_INT >= 23) {
-      if (packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
+      if (packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT) && canAuthenticateWithFingerprint()) {
         biometrics.add("fingerprint");
       }
     }
@@ -294,6 +294,11 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   private boolean canAuthenticateWithBiometrics() {
     if (biometricManager == null) return false;
     return biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
+  }
+
+  private boolean canAuthenticateWithFingerprint() {
+    if (fingerprintManager == null) return false;
+    return fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
   }
 
   private boolean hasBiometricHardware() {
