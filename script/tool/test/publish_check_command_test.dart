@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart=2.9
-
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io' as io;
@@ -23,9 +21,9 @@ import 'util.dart';
 void main() {
   group('$PublishCheckProcessRunner tests', () {
     FileSystem fileSystem;
-    Directory packagesDir;
-    PublishCheckProcessRunner processRunner;
-    CommandRunner<void> runner;
+    late Directory packagesDir;
+    late PublishCheckProcessRunner processRunner;
+    late CommandRunner<void> runner;
 
     setUp(() {
       fileSystem = MemoryFileSystem();
@@ -177,7 +175,7 @@ void main() {
         } else if (request.url.pathSegments.last == 'no_publish_b.json') {
           return http.Response(json.encode(httpResponseB), 200);
         }
-        return null;
+        return http.Response('', 500);
       });
       final PublishCheckCommand command = PublishCheckCommand(packagesDir,
           processRunner: processRunner, httpClient: mockClient);
@@ -193,10 +191,8 @@ void main() {
       final Directory plugin2Dir =
           createFakePlugin('no_publish_b', packagesDir, includeVersion: true);
 
-      createFakePubspec(plugin1Dir,
-          name: 'no_publish_a', includeVersion: true, version: '0.1.0');
-      createFakePubspec(plugin2Dir,
-          name: 'no_publish_b', includeVersion: true, version: '0.2.0');
+      createFakePubspec(plugin1Dir, name: 'no_publish_a', version: '0.1.0');
+      createFakePubspec(plugin2Dir, name: 'no_publish_b', version: '0.2.0');
 
       processRunner.processesToReturn.add(
         MockProcess()..exitCodeCompleter.complete(0),
@@ -243,7 +239,7 @@ void main() {
         } else if (request.url.pathSegments.last == 'no_publish_b.json') {
           return http.Response(json.encode(httpResponseB), 200);
         }
-        return null;
+        return http.Response('', 500);
       });
       final PublishCheckCommand command = PublishCheckCommand(packagesDir,
           processRunner: processRunner, httpClient: mockClient);
@@ -259,10 +255,8 @@ void main() {
       final Directory plugin2Dir =
           createFakePlugin('no_publish_b', packagesDir, includeVersion: true);
 
-      createFakePubspec(plugin1Dir,
-          name: 'no_publish_a', includeVersion: true, version: '0.1.0');
-      createFakePubspec(plugin2Dir,
-          name: 'no_publish_b', includeVersion: true, version: '0.2.0');
+      createFakePubspec(plugin1Dir, name: 'no_publish_a', version: '0.1.0');
+      createFakePubspec(plugin2Dir, name: 'no_publish_b', version: '0.2.0');
 
       processRunner.processesToReturn.add(
         MockProcess()..exitCodeCompleter.complete(0),
@@ -312,7 +306,7 @@ void main() {
         } else if (request.url.pathSegments.last == 'no_publish_b.json') {
           return http.Response(json.encode(httpResponseB), 200);
         }
-        return null;
+        return http.Response('', 500);
       });
       final PublishCheckCommand command = PublishCheckCommand(packagesDir,
           processRunner: processRunner, httpClient: mockClient);
@@ -328,10 +322,8 @@ void main() {
       final Directory plugin2Dir =
           createFakePlugin('no_publish_b', packagesDir, includeVersion: true);
 
-      createFakePubspec(plugin1Dir,
-          name: 'no_publish_a', includeVersion: true, version: '0.1.0');
-      createFakePubspec(plugin2Dir,
-          name: 'no_publish_b', includeVersion: true, version: '0.2.0');
+      createFakePubspec(plugin1Dir, name: 'no_publish_a', version: '0.1.0');
+      createFakePubspec(plugin2Dir, name: 'no_publish_b', version: '0.2.0');
       await plugin1Dir.childFile('pubspec.yaml').writeAsString('bad-yaml');
 
       processRunner.processesToReturn.add(
