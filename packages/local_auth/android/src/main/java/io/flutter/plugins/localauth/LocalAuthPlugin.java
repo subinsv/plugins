@@ -158,6 +158,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
 
           @Override
           public void onError(String code, String error) {
+            System.out.println("----Error code------" + code);
             if (authInProgress.compareAndSet(true, false)) {
               result.error(code, error, null);
             }

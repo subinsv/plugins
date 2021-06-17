@@ -179,26 +179,4 @@ class LocalAuthentication {
     });
     return biometrics;
   }
-
-  Future<List<BiometricType>> getDeviceBiometrics() async {
-    final List<String> result =
-        (await _channel.invokeListMethod('getDeviceBiometrics')) ?? [];
-    final List<BiometricType> biometrics = <BiometricType>[];
-    result.forEach((String value) {
-      switch (value) {
-        case 'face':
-          biometrics.add(BiometricType.face);
-          break;
-        case 'fingerprint':
-          biometrics.add(BiometricType.fingerprint);
-          break;
-        case 'iris':
-          biometrics.add(BiometricType.iris);
-          break;
-        case 'undefined':
-          break;
-      }
-    });
-    return biometrics;
-  }
 }

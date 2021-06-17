@@ -185,6 +185,7 @@
       case LAErrorPasscodeNotSet:
       case LAErrorTouchIDNotAvailable:
       case LAErrorTouchIDNotEnrolled:
+      case LAErrorUserCancel:
       case LAErrorTouchIDLockout:
         [self handleErrors:error flutterArguments:arguments withFlutterResult:result];
         return;
@@ -194,6 +195,8 @@
           self->_lastResult = result;
           return;
         }
+      
+         
     }
     result(@NO);
   }
@@ -204,6 +207,7 @@
     withFlutterResult:(FlutterResult)result {
   NSString *errorCode = @"NotAvailable";
   switch (authError.code) {
+    
     case LAErrorPasscodeNotSet:
     case LAErrorTouchIDNotEnrolled:
       if ([arguments[@"useErrorDialogs"] boolValue]) {
@@ -221,7 +225,11 @@
              flutterResult:result
           additionalButton:nil];
       return;
+          
+   
   }
+    NSLog(@"\(authError.code)");
+        
   result([FlutterError errorWithCode:errorCode
                              message:authError.localizedDescription
                              details:authError.domain]);
@@ -242,7 +250,7 @@
    
        NSString *result=[NSString stringWithCString:systemInfo.machine
                                  encoding:NSUTF8StringEncoding];
-       NSLog(result);
+       NSLog(@"%@", result);
        return result;
        
    }
