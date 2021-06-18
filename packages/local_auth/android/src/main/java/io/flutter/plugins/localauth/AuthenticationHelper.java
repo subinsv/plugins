@@ -166,7 +166,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
         break;
       case BiometricPrompt.ERROR_USER_CANCELED:
         completionHandler.onError(
-                "UserCancelled",
+                "UserCancel",
                 "The operation was canceled by user");
         break;
       case BiometricPrompt.ERROR_CANCELED:

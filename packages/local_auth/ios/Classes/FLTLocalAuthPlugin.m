@@ -218,7 +218,9 @@
         return;
       }
       errorCode = authError.code == LAErrorPasscodeNotSet ? @"PasscodeNotSet" : @"NotEnrolled";
-      break;
+    case LAErrorUserCancel:
+          errorCode =@"UserCancel";
+          break;
     case LAErrorTouchIDLockout:
       [self alertMessage:arguments[@"lockOut"]
                firstButton:arguments[@"okButton"]
@@ -228,7 +230,7 @@
           
    
   }
-    NSLog(@"\(authError.code)");
+    NSLog(@"%ld",(long)authError.code);
         
   result([FlutterError errorWithCode:errorCode
                              message:authError.localizedDescription

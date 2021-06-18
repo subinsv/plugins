@@ -24,3 +24,6 @@ const String lockedOut = 'LockedOut';
 /// Indicates the API being disabled due to too many lock outs.
 /// Strong authentication like PIN/Pattern/Password is required to unlock.
 const String permanentlyLockedOut = 'PermanentlyLockedOut';
+
+///Indicates the API being cancelled by the user
+const String cancelledByUser = 'UserCancel';
