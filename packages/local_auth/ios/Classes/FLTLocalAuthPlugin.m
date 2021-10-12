@@ -222,6 +222,9 @@
           errorCode =@"UserCancel";
           break;
     case LAErrorTouchIDLockout:
+     result([FlutterError errorWithCode:@"LockedOut"
+                             message:authError.localizedDescription
+                             details:authError.domain]);
       [self alertMessage:arguments[@"lockOut"]
                firstButton:arguments[@"okButton"]
              flutterResult:result
