@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 #import <LocalAuthentication/LocalAuthentication.h>
+#import<sys/utsname.h>
 
 #import "FLTLocalAuthPlugin.h"
+#import <sys/utsname.h>
 
 @interface FLTLocalAuthPlugin ()
 @property(nonatomic, copy, nullable) NSDictionary<NSString *, NSNumber *> *lastCallArgs;
@@ -94,6 +96,7 @@
 }
 
 - (void)getAvailableBiometrics:(FlutterResult)result {
+    [self deviceName];
   LAContext *context = self.createAuthContext;
   NSError *authError = nil;
   NSMutableArray<NSString *> *biometrics = [[NSMutableArray<NSString *> alloc] init];
@@ -113,6 +116,8 @@
   } else if (authError.code == LAErrorTouchIDNotEnrolled) {
     [biometrics addObject:@"undefined"];
   }
+    
+  
   result(biometrics);
 }
 
@@ -180,6 +185,7 @@
       case LAErrorPasscodeNotSet:
       case LAErrorTouchIDNotAvailable:
       case LAErrorTouchIDNotEnrolled:
+      case LAErrorUserCancel:
       case LAErrorTouchIDLockout:
         [self handleErrors:error flutterArguments:arguments withFlutterResult:result];
         return;
@@ -189,6 +195,8 @@
           self->_lastResult = result;
           return;
         }
+      
+         
     }
     result(@NO);
   }
@@ -199,6 +207,7 @@
     withFlutterResult:(FlutterResult)result {
   NSString *errorCode = @"NotAvailable";
   switch (authError.code) {
+    
     case LAErrorPasscodeNotSet:
     case LAErrorTouchIDNotEnrolled:
       if ([arguments[@"useErrorDialogs"] boolValue]) {
@@ -209,14 +218,23 @@
         return;
       }
       errorCode = authError.code == LAErrorPasscodeNotSet ? @"PasscodeNotSet" : @"NotEnrolled";
-      break;
+    case LAErrorUserCancel:
+          errorCode =@"UserCancel";
+          break;
     case LAErrorTouchIDLockout:
+     result([FlutterError errorWithCode:@"LockedOut"
+                             message:authError.localizedDescription
+                             details:authError.domain]);
       [self alertMessage:arguments[@"lockOut"]
                firstButton:arguments[@"okButton"]
              flutterResult:result
           additionalButton:nil];
       return;
+          
+   
   }
+    NSLog(@"%ld",(long)authError.code);
+        
   result([FlutterError errorWithCode:errorCode
                              message:authError.localizedDescription
                              details:authError.domain]);
@@ -229,5 +247,17 @@
     [self authenticateWithBiometrics:_lastCallArgs withFlutterResult:self.lastResult];
   }
 }
+ // import it in your header or implementation file.
+  - (NSString*) deviceName
+   {
+       struct utsname systemInfo;
+       uname(&systemInfo);
+   
+       NSString *result=[NSString stringWithCString:systemInfo.machine
+                                 encoding:NSUTF8StringEncoding];
+       NSLog(@"%@", result);
+       return result;
+       
+   }
 
 @end

@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
       print(e);
       setState(() {
         _isAuthenticating = false;
-        _authorized = "Error - ${e.message}";
+        _authorized = "Error - ${e.message} code -- ${e.code}";
       });
       return;
     }
@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
       print(e);
       setState(() {
         _isAuthenticating = false;
-        _authorized = "Error - ${e.message}";
+        _authorized = "Error - ${e.message}  code - ${e.code}";
       });
       return;
     }
@@ -130,6 +130,7 @@ class _MyAppState extends State<MyApp> {
 
   void _cancelAuthentication() async {
     await auth.stopAuthentication();
+    print("canceling authentication");
     setState(() => _isAuthenticating = false);
   }
 

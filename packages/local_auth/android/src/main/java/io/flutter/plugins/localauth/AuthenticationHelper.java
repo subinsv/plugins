@@ -164,6 +164,16 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
             "PermanentlyLockedOut",
             "The operation was canceled because ERROR_LOCKOUT occurred too many times. Biometric authentication is disabled until the user unlocks with strong authentication (PIN/Pattern/Password)");
         break;
+      case BiometricPrompt.ERROR_NEGATIVE_BUTTON:
+        completionHandler.onError(
+                "UserCancel",
+                "The operation was canceled by user");
+        break;
+      case BiometricPrompt.ERROR_USER_CANCELED:
+        completionHandler.onError(
+                "UserCancel",
+                "The operation was canceled by user");
+        break;
       case BiometricPrompt.ERROR_CANCELED:
         // If we are doing sticky auth and the activity has been paused,
         // ignore this error. We will start listening again when resumed.
